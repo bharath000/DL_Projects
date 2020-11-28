@@ -6,8 +6,8 @@ def plot_images(images):
     w=10
     h=10
     fig=plt.figure(figsize=(w, h))
-    columns = 4
-    rows = 1
+    columns = 8
+    rows = 2
     for i in range(1, columns*rows +1):
         #img = np.random.randint(10, size=(h,w))
         fig.add_subplot(rows, columns, i)

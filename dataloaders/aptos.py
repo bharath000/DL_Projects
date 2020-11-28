@@ -8,8 +8,12 @@ from torch.utils.data import Dataset
 class AptosDataset(Dataset):
     "Change the Constructor as per your Dataset"
     def  __init__(self, csv_filepath, root_dir, transform = None ):
+        if isinstance(csv_filepath, pd.DataFrame):
+            self.labels = csv_filepath
+        else:
+            self.labels = pd.read_csv(csv_filepath)
 
-        self.labels = pd.read_csv(csv_filepath)
+        
         self.root_dir = root_dir
         self.transform = transform
 

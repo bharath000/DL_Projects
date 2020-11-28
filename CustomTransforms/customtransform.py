@@ -3,6 +3,7 @@ import numpy as np
 from scipy import ndimage
 import random
 import cv2
+from torchvision import transforms 
 
 class Rescale(object):
     """Rescale the image in a sample to a given size.
@@ -31,13 +32,16 @@ class Rescale(object):
 
         new_h, new_w = int(new_h), int(new_w)
 
-        img = transform.resize(image, (new_h, new_w))
+        img  = cv2.resize(image, dsize=(224, 224), interpolation=cv2.INTER_LANCZOS4)
+        k = np.max(img.shape)//20*2+1
+        bg = cv2.medianBlur(img, k)
+        return cv2.addWeighted (img, 4, bg, -4, 128), label
 
         # h and w are swapped for landmarks because for images,
         # x and y axes are axis 1 and 0 respectively
         #landmarks = landmarks * [new_w / w, new_h / h]
 
-        return img, label
+        #return img, label
 
 
 class RandomShear(object):
@@ -53,7 +57,7 @@ class RandomShear(object):
         tform = transform.AffineTransform(
         shear = self.rang)
         if np.random.rand(1) < self.p:
-            print("applied shear transformation")
+            #print("applied shear transformation")
             # Apply transmform to mask if the task is segementation
             tf_img = transform.warp(image, tform.inverse)
             return tf_img, label
@@ -73,7 +77,7 @@ class RandomShift(object):
         tform = transform.AffineTransform(
         translation = self.rang)
         if np.random.rand(1) < self.p:
-            print("applied translation transformation")
+           # print("applied translation transformation")
             # Apply transmform to mask if the task is segementation
             tf_img = transform.warp(image, tform.inverse)
             return tf_img, label
@@ -92,7 +96,7 @@ class RandomRotate(object):
         #tform = transform.AffineTransform(
         #rotation = self.rang)
         if np.random.rand(1) < self.p:
-            print("applied rotate transformation")
+           # print("applied rotate transformation")
             # Apply transmform to mask if the task is segementation
             tf_img = transform.rotate(image, self.rang)
             return tf_img, label
@@ -111,7 +115,7 @@ class RandomScaling(object):
         tform = transform.AffineTransform(
         scale = self.rang)
         if np.random.rand(1) < self.p:
-            print("applied scale transformation")
+           # print("applied scale transformation")
             # Apply transmform to mask if the task is segementation
             tf_img = transform.warp(image, tform.inverse)
             return tf_img, label
@@ -196,6 +200,29 @@ class Contrast(object):
        
         
 
+        return image, label
+
+class ToTensor(object):
+    """Convert ndarrays in sample to Tensors."""
+
+    def __call__(self, sample):
+        image, label = sample[0], sample[1]
+
+        # swap color axis because
+        # numpy image: H x W x C
+        # torch image: C X H X W
+        #image /= 255
+
+        image = image*(1.0/255)
+        b = np.zeros(5)
+        for i in range(0, label+1):
+            b[i] = 1
+        label = b
+        image = image.transpose((2, 0, 1))
+        #image = transforms.Normalize(image, mean=[0.485, 0.456, 0.406],std=[0.229, 0.224, 0.225])
+
+
+        
         return image, label
 
 
