@@ -1,8 +1,7 @@
 ## Deep Learning Code Base for Tranining Models For Different Applications
 
 
-### This Repo Consists of Deep Learning Code Base for Creating Custom Models, Data loaders, losses and Data Augmentations techiniques using PYTorch as the
-the main framework for training, It is used to train models for Dectecting Diabetic retinopathy of fundas Images.: https://morning-anchorage-56517.herokuapp.com/adl.html
+### This Repo Consists of Deep Learning Code Base for Creating Custom Models, Data loaders, losses, down/up sampling training and Data Augmentations techiniques using PYTorch as the main framework for training, It is used to train models for Dectecting Diabetic retinopathy of fundas Images.: https://morning-anchorage-56517.herokuapp.com/adl.html
 
 ### Folder Structure:
 
